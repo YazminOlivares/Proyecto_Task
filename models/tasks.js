@@ -43,9 +43,19 @@ async function updateTask(id, newData) {
 }
 
 async function deleteTaskById(id) {
-  const taskRef = doc(db, 'tasks', id); 
-  await deleteDoc(taskRef); 
+  const tasksCollection = collection(db, 'tasks');
+  const queryById = query(tasksCollection, where('id', '==', id));
+  const querySnapshot = await getDocs(queryById);
+
+  if (querySnapshot.empty) {
+    throw new Error("No se encontró ninguna tarea con ese ID");
+  }
+
+  const docId = querySnapshot.docs[0].id;
+  await deleteDoc(doc(db, 'tasks', docId));
+  console.log(`Documento con id ${id} eliminado`);
 }
+
 
 async function createTask(data, nUsuario) {
   const newTask = {

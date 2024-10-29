@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.0",
+    "express": "^4.21.1",
     "firebase": "^10.14.1",
     "uuid": "^10.0.0"
   },
@@ -10,5 +10,18 @@
     "mocha": "^10.7.3",
     "sinon": "^19.0.2",
     "supertest": "^7.0.0"
-  }
+  },
+  "name": "proyecto_task",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

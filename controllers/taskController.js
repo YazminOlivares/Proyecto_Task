@@ -42,9 +42,11 @@ async function updateTask(req, res) {
 }
 async function deleteTask(req, res) {
   const { id } = req.params; 
+  console.log('ID desde el deleteTask: ', id);
   try {
-    await taskModel.deleteTaskById(id); 
-    res.status(200).json({ code: 200, message: "Tarea eliminada correctamente" });
+    const deletedTask = await taskModel.deleteTaskById(id); 
+    console.log('deletedTask: ', deletedTask);
+    res.status(200).json({ code: 200, message: "Tarea eliminada correctamente", task: deletedTask });
   } catch (error) {
     console.error("Error al eliminar la tarea:", error);
     res.status(404).json({ code: 404, message: "Error al eliminar la tarea: " + error.message });
