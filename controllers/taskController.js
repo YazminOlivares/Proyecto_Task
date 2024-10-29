@@ -40,6 +40,21 @@ async function updateTask(req, res) {
     res.status(404).json({ code: 404, message: "Error al actualizar la tarea: " + error.message });
   }
 }
+
+async function updateTask2(req, res) {
+  const { id } = req.params; 
+  console.log('id actualizar: ', id);
+  const newData = req.body; 
+  console.log('data body actualizar: ', req.body);
+  try {
+    const updatedTask = await taskModel.updateTask2(id, newData);
+    res.status(200).json({ code: 200, message: "Tarea actualizada correctamente", task: updatedTask });
+  } catch (error) {
+    console.error("Error al actualizar la tarea:", error);
+    res.status(404).json({ code: 404, message: "Error al actualizar la tarea: " + error.message });
+  }
+}
+
 async function deleteTask(req, res) {
   const { id } = req.params; 
   console.log('ID desde el deleteTask: ', id);
@@ -58,5 +73,6 @@ module.exports = {
   createTask,
   getTaskById,
   updateTask,
+  updateTask2,
   deleteTask,
 };
