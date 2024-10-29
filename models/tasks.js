@@ -14,32 +14,24 @@ async function getAllTasks(usuario) {
 async function getTaskById(idTask, usuario) {
   console.log('id: ', idTask);
   console.log('usuario: ', usuario);
-  const docRef = doc(db, 'tasks', idTask); // Crear referencia al documento en 'tasks'
-  const taskSnapshot = await getDoc(docRef); // Obtener el documento directamente
+  const docRef = doc(db, 'tasks', idTask); 
+  const taskSnapshot = await getDoc(docRef); 
 
-  if (!taskSnapshot.exists()) { // Verificar si el documento existe
+  if (!taskSnapshot.exists()) { 
     const tasksCollection = collection(db, 'tasks');
     const queryById = query(tasksCollection, where('id', '==', idTask), where('usuario', '==', usuario));
-    const taskSnapshot2 = await getDocs(queryById); // Buscar por el campo 'id'
+    const taskSnapshot2 = await getDocs(queryById); 
 
     if (taskSnapshot2.empty) {
       throw new Error("No se encontró ninguna tarea con ese ID");
     }
 
-    // Si hay resultados en la búsqueda alternativa, devolver los datos
     const taskData = taskSnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return taskData[0]; // Devuelve el primer resultado coincidente
+    return taskData[0]; 
   }
 
-  // Si el documento existe, extraer y devolver los datos
   const taskData = { id: taskSnapshot.id, ...taskSnapshot.data() };
   return taskData;
-}
-
-async function updateTask(id, newData) {
-  const taskRef = doc(db, 'tasks', id); 
-  await updateDoc(taskRef, newData);
-  return { id, ...newData }; 
 }
 
 async function deleteTaskById(id) {
@@ -68,6 +60,21 @@ async function updateTask2(id, data) {
   const docId = querySnapshot.docs[0].id;
   await updateDoc(doc(db, 'tasks', docId), data);
   console.log(`Documento con id ${id} actualizado.`);
+}
+
+
+async function updateTask(id, data) {
+  const tasksCollection = collection(db, 'tasks');
+  const queryById = query(tasksCollection, where('id', '==', id));
+  const querySnapshot = await getDocs(queryById);
+
+  if (querySnapshot.empty) {
+    throw new Error("No se encontró ninguna tarea con ese ID");
+  }
+
+  const docId = querySnapshot.docs[0].id;
+  await updateDoc(doc(db, 'tasks', docId), data);
+  console.log(`Documento actualizado`);
 }
 
 
