@@ -34,12 +34,6 @@ async function getTaskById(idTask, usuario) {
   return taskData;
 }
 
-async function updateTask(id, newData) {
-  const taskRef = doc(db, 'tasks', id); 
-  await updateDoc(taskRef, newData);
-  return { id, ...newData }; 
-}
-
 async function deleteTaskById(id) {
   const tasksCollection = collection(db, 'tasks');
   const queryById = query(tasksCollection, where('id', '==', id));
@@ -52,6 +46,21 @@ async function deleteTaskById(id) {
   const docId = querySnapshot.docs[0].id;
   await deleteDoc(doc(db, 'tasks', docId));
   console.log(`Documento con id ${id} eliminado`);
+}
+
+
+async function updateTask(id, data) {
+  const tasksCollection = collection(db, 'tasks');
+  const queryById = query(tasksCollection, where('id', '==', id));
+  const querySnapshot = await getDocs(queryById);
+
+  if (querySnapshot.empty) {
+    throw new Error("No se encontró ninguna tarea con ese ID");
+  }
+
+  const docId = querySnapshot.docs[0].id;
+  await updateDoc(doc(db, 'tasks', docId), data);
+  console.log(`Documento actualizado`);
 }
 
 

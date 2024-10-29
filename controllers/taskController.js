@@ -32,6 +32,7 @@ async function getTaskById(req, res) {
 async function updateTask(req, res) {
   const { id } = req.params; 
   const newData = req.body; 
+  
   try {
     const updatedTask = await taskModel.updateTask(id, newData);
     res.status(200).json({ code: 200, message: "Tarea actualizada correctamente", task: updatedTask });
