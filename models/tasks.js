@@ -14,24 +14,22 @@ async function getAllTasks(usuario) {
 async function getTaskById(idTask, usuario) {
   console.log('id: ', idTask);
   console.log('usuario: ', usuario);
-  const docRef = doc(db, 'tasks', idTask); // Crear referencia al documento en 'tasks'
-  const taskSnapshot = await getDoc(docRef); // Obtener el documento directamente
+  const docRef = doc(db, 'tasks', idTask); 
+  const taskSnapshot = await getDoc(docRef); 
 
-  if (!taskSnapshot.exists()) { // Verificar si el documento existe
+  if (!taskSnapshot.exists()) { 
     const tasksCollection = collection(db, 'tasks');
     const queryById = query(tasksCollection, where('id', '==', idTask), where('usuario', '==', usuario));
-    const taskSnapshot2 = await getDocs(queryById); // Buscar por el campo 'id'
+    const taskSnapshot2 = await getDocs(queryById); 
 
     if (taskSnapshot2.empty) {
       throw new Error("No se encontró ninguna tarea con ese ID");
     }
 
-    // Si hay resultados en la búsqueda alternativa, devolver los datos
     const taskData = taskSnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return taskData[0]; // Devuelve el primer resultado coincidente
+    return taskData[0]; 
   }
 
-  // Si el documento existe, extraer y devolver los datos
   const taskData = { id: taskSnapshot.id, ...taskSnapshot.data() };
   return taskData;
 }
